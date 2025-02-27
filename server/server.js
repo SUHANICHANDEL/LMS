@@ -7,10 +7,10 @@ import { clerkWebhooks } from './controllers/webhooks.js';
 
 
 // Initialize Express
-const app = express()
+const app = express();
 
 // Connect to database
-;(async () => {
+(async () => {
     await connectDB()
 })()
 
