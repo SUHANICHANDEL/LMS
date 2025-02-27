@@ -47,6 +47,7 @@ export const clerkWebhooks = async (req, res)=> {
             default:
                 break;
         }
+        console.log("Webhook received:", req.body);
 
     } catch (error) {
         res.json({success: false, message: error.message})
