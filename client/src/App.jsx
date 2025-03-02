@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes, useMatch, BrowserRouter } from 'react-router-dom';
-import { AppContextProvider } from './context/AppContext'; // Import the context provider
+import { AppContextProvider } from './context/AppContext.jsx'; // Import the context provider
 import Home from './pages/student/Home';
 import CoursesList from './pages/student/CoursesList';
 import CourseDetails from './pages/student/CouseDetails';
@@ -14,13 +14,14 @@ import MyCourses from './pages/educator/MyCourses';
 import StudentsEnrolled from './pages/educator/StudentsEnrolled';
 import Navbar from './components/student/Navbar';
 import "quill/dist/quill.snow.css";
-
+import { ToastContainer } from 'react-toastify';
 const App = () => {
   const isEducatorRoute = useMatch('/educator/*');
 
   return (
     <AppContextProvider> {/* Wrap everything inside the provider */}
       <div className='text-default min-h-screen bg-white'>
+        <ToastContainer />
         {!isEducatorRoute && <Navbar />}
 
         <Routes>
