@@ -170,4 +170,6 @@ const CouseDetails = () => {
   ) : <Loading />
 }
 
+
+
 export default CouseDetails

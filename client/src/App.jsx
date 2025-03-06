@@ -3,7 +3,7 @@ import { Route, Routes, useMatch, BrowserRouter } from 'react-router-dom';
 import { AppContextProvider } from './context/AppContext.jsx'; // Import the context provider
 import Home from './pages/student/Home';
 import CoursesList from './pages/student/CoursesList';
-import CourseDetails from './pages/student/CouseDetails';
+import CouseDetails from './pages/student/CouseDetails';
 import MyEnrollments from './pages/student/MyEnrollments';
 import Player from './pages/student/Player';
 import Loading from './components/student/Loading';
@@ -28,7 +28,7 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/course-list' element={<CoursesList />} />
           <Route path='/course-list/:input' element={<CoursesList />} />
-          <Route path='/course/:id' element={<CourseDetails />} />
+          <Route path='/course/:id' element={<CouseDetails />} />
           <Route path='/my-enrollments' element={<MyEnrollments />} />
           <Route path='/player/:courseID' element={<Player />} />
           <Route path='/loading/:path' element={<Loading />} />
