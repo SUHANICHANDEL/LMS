@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { AppContext } from '../../context/AppContext';
 import { useParams } from 'react-router-dom';
 import { assets } from '../../assets/assets';
@@ -19,7 +19,7 @@ const Player = () => {
   const [progressData, setProgressData] = useState(null);
   const [initialRating, setInitialRating] = useState(0);
 
-  const getCourseData = () => {
+  const getCourseData = useCallback(() => {
     enrolledCourses.forEach((course) => {
       if (course._id === courseID) {
         setCourseData(course);
@@ -30,7 +30,25 @@ const Player = () => {
         });
       }
     });
-  };
+  }, [enrolledCourses, courseID, userData._id]);
+
+  const getCourseProgress = useCallback(async () => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.post(
+        `${backendUrl}/api/user/get-course-progress`,
+        { courseID },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (data.success) {
+        setProgressData(data.progressData);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }, [backendUrl, courseID, getToken]);
 
   const toggleSection = (index) => {
     setOpenSections((prev) => ({
@@ -50,24 +68,6 @@ const Player = () => {
       if (data.success) {
         toast.success(data.message);
         getCourseProgress();
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  const getCourseProgress = async () => {
-    try {
-      const token = await getToken();
-      const { data } = await axios.post(
-        `${backendUrl}/api/user/get-course-progress`,
-        { courseID },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      if (data.success) {
-        setProgressData(data.progressData);
       } else {
         toast.error(data.message);
       }
@@ -99,19 +99,17 @@ const Player = () => {
     if (enrolledCourses.length > 0) {
       getCourseData();
     }
-  }, [enrolledCourses]);
+  }, [enrolledCourses, getCourseData]);
 
   useEffect(() => {
     getCourseProgress();
-  }, []);
+  }, [getCourseProgress]);
 
   return courseData ? (
     <>
       <div className='p-4 sm:p-10 flex flex-col-reverse md:grid md:grid-cols-2 gap-10 md:px-36'>
-        {/* Left column */}
         <div className='text-gray-800'>
           <h2 className='text-xl font-semibold'>Course Structure</h2>
-
           <div className='pt-5'>
             {courseData.courseContent.map((chapter, index) => (
               <div key={index} className='border border-gray-300 bg-white mb-2 rounded'>
@@ -161,7 +159,6 @@ const Player = () => {
           </div>
         </div>
 
-        {/* Right column */}
         <div className='md:mt-10'>
           {playerData ? (
             <div>
